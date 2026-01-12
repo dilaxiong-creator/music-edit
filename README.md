@@ -1,1 +1,1 @@
-使用kivy框架 请自行打包为Android应用
+本项目使用kivy框架 请自行打包为Android应用
