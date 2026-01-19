@@ -1,0 +1,304 @@
+#:kivy 2.0
+#:import dp kivy.metrics.dp
+
+<MusicListItem>:
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [dp(8),]
+    
+    BoxLayout:
+        orientation: 'horizontal'
+        padding: dp(10)
+        spacing: dp(10)
+        
+        # 音乐图标
+        Label:
+            text: "♪"
+            font_size: dp(32)
+            color: 0.2, 0.6, 0.86, 1
+            size_hint_x: None
+            width: dp(50)
+        
+        # 信息区域
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: dp(2)
+            
+            Label:
+                text: root.title
+                font_size: dp(16)
+                bold: True
+                color: 0.1, 0.1, 0.1, 1
+                halign: 'left'
+                valign: 'middle'
+                text_size: self.size
+                size_hint_y: 0.6
+            
+            Label:
+                text: root.artist
+                font_size: dp(13)
+                color: 0.4, 0.4, 0.4, 1
+                halign: 'left'
+                valign: 'middle'
+                text_size: self.size
+                size_hint_y: 0.4
+        
+        # 时长
+        Label:
+            text: root.duration
+            font_size: dp(13)
+            color: 0.4, 0.4, 0.4, 1
+            size_hint_x: None
+            width: dp(60)
+            halign: 'right'
+            valign: 'middle'
+
+
+<MainScreen>:
+    name: 'main'
+    
+    BoxLayout:
+        orientation: 'vertical'
+        
+        # 顶部栏
+        BoxLayout:
+            size_hint_y: None
+            height: dp(60)
+            padding: dp(10)
+            canvas.before:
+                Color:
+                    rgba: 0.2, 0.6, 0.86, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            Label:
+                text: "音乐元数据管理器"
+                font_size: dp(20)
+                bold: True
+                color: 1, 1, 1, 1
+            
+            Button:
+                id: refresh_button
+                text: "⟳"
+                font_size: dp(24)
+                size_hint_x: None
+                width: dp(50)
+                background_color: 0, 0, 0, 0
+                color: 1, 1, 1, 1
+                on_release: root.refresh_list()
+        
+        # 搜索框
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            padding: dp(10)
+            
+            TextInput:
+                id: search_input
+                hint_text: "搜索歌曲、艺术家或专辑..."
+                multiline: False
+                font_size: dp(14)
+                padding: dp(10)
+                on_text: root.search_music(self.text)
+                background_color: 1, 1, 1, 1
+        
+        # 音乐列表
+        ScrollView:
+            do_scroll_x: False
+            
+            GridLayout:
+                id: music_list_container
+                cols: 1
+                spacing: dp(8)
+                padding: dp(10)
+                size_hint_y: None
+                height: self.minimum_height
+
+
+<DetailScreen>:
+    name: 'detail'
+    
+    BoxLayout:
+        orientation: 'vertical'
+        
+        # 顶部栏
+        BoxLayout:
+            size_hint_y: None
+            height: dp(60)
+            padding: dp(10)
+            canvas.before:
+                Color:
+                    rgba: 0.2, 0.6, 0.86, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            Button:
+                text: "←"
+                font_size: dp(24)
+                size_hint_x: None
+                width: dp(50)
+                background_color: 0, 0, 0, 0
+                color: 1, 1, 1, 1
+                on_release: root.go_back()
+            
+            Label:
+                text: "编辑元数据"
+                font_size: dp(20)
+                bold: True
+                color: 1, 1, 1, 1
+            
+            Widget:
+                size_hint_x: None
+                width: dp(50)
+        
+        # 编辑表单
+        ScrollView:
+            do_scroll_x: False
+            
+            BoxLayout:
+                orientation: 'vertical'
+                padding: dp(20)
+                spacing: dp(15)
+                size_hint_y: None
+                height: self.minimum_height
+                
+                # 文件信息
+                Label:
+                    id: filename_label
+                    text: "文件名: "
+                    font_size: dp(12)
+                    color: 0.4, 0.4, 0.4, 1
+                    size_hint_y: None
+                    height: dp(30)
+                    halign: 'left'
+                    valign: 'middle'
+                    text_size: self.size
+                
+                Label:
+                    id: duration_label
+                    text: "时长: "
+                    font_size: dp(12)
+                    color: 0.4, 0.4, 0.4, 1
+                    size_hint_y: None
+                    height: dp(30)
+                    halign: 'left'
+                    valign: 'middle'
+                    text_size: self.size
+                
+                # 标题
+                Label:
+                    text: "标题"
+                    font_size: dp(14)
+                    bold: True
+                    color: 0.1, 0.1, 0.1, 1
+                    size_hint_y: None
+                    height: dp(30)
+                    halign: 'left'
+                    valign: 'middle'
+                    text_size: self.size
+                
+                TextInput:
+                    id: title_input
+                    multiline: False
+                    font_size: dp(16)
+                    size_hint_y: None
+                    height: dp(45)
+                    padding: dp(10)
+                
+                # 艺术家
+                Label:
+                    text: "艺术家"
+                    font_size: dp(14)
+                    bold: True
+                    color: 0.1, 0.1, 0.1, 1
+                    size_hint_y: None
+                    height: dp(30)
+                    halign: 'left'
+                    valign: 'middle'
+                    text_size: self.size
+                
+                TextInput:
+                    id: artist_input
+                    multiline: False
+                    font_size: dp(16)
+                    size_hint_y: None
+                    height: dp(45)
+                    padding: dp(10)
+                
+                # 专辑
+                Label:
+                    text: "专辑"
+                    font_size: dp(14)
+                    bold: True
+                    color: 0.1, 0.1, 0.1, 1
+                    size_hint_y: None
+                    height: dp(30)
+                    halign: 'left'
+                    valign: 'middle'
+                    text_size: self.size
+                
+                TextInput:
+                    id: album_input
+                    multiline: False
+                    font_size: dp(16)
+                    size_hint_y: None
+                    height: dp(45)
+                    padding: dp(10)
+                
+                # 年份
+                Label:
+                    text: "年份"
+                    font_size: dp(14)
+                    bold: True
+                    color: 0.1, 0.1, 0.1, 1
+                    size_hint_y: None
+                    height: dp(30)
+                    halign: 'left'
+                    valign: 'middle'
+                    text_size: self.size
+                
+                TextInput:
+                    id: year_input
+                    multiline: False
+                    font_size: dp(16)
+                    size_hint_y: None
+                    height: dp(45)
+                    padding: dp(10)
+                    input_filter: 'int'
+                
+                # 流派
+                Label:
+                    text: "流派"
+                    font_size: dp(14)
+                    bold: True
+                    color: 0.1, 0.1, 0.1, 1
+                    size_hint_y: None
+                    height: dp(30)
+                    halign: 'left'
+                    valign: 'middle'
+                    text_size: self.size
+                
+                TextInput:
+                    id: genre_input
+                    multiline: False
+                    font_size: dp(16)
+                    size_hint_y: None
+                    height: dp(45)
+                    padding: dp(10)
+                
+                # 保存按钮
+                Button:
+                    text: "保存更改"
+                    font_size: dp(16)
+                    bold: True
+                    size_hint_y: None
+                    height: dp(50)
+                    background_color: 0.2, 0.6, 0.86, 1
+                    color: 1, 1, 1, 1
+                    on_release: root.save_metadata()
